@@ -1,0 +1,85 @@
+===============================================================
+              🧠 OFFLINE PDF ANALYSIS PIPELINE (MISTRAL 7B)
+===============================================================
+
+📁 PROJECT STRUCTURE
+
+OfflinePDFAnalysis/
+├── main.py                  # 🚀 Entry point
+├── requirements.txt         # 📦 Dependencies
+├── data/                    # 📄 Input PDFs
+│   └── sample.pdf
+├── embeddings/              # 🧠 FAISS indexes (.faiss + .pkl)
+│   └── sample.faiss
+│   └── sample.pkl
+├── metadata/                # 🗃️ Metadata per doc (chunk count, etc.)
+│   └── sample.json
+└── output/                  # 💬 Optional output logs or answers
+    └── answers.txt
+
+===============================================================
+🧩 STEP-BY-STEP PIPELINE
+===============================================================
+
+[1] 📥 LOAD PDF
+    └── Use PyPDF2 or fitz (PyMuPDF)
+    └── Extract raw text from all pages
+
+[2] ✂️ CHUNK TEXT
+    └── Use langchain's RecursiveCharacterTextSplitter
+    └── Recommended: chunk_size=1000, chunk_overlap=200
+
+[3] 🧠 EMBEDDING (SentenceTransformers)
+    └── Use model: "all-MiniLM-L6-v2" or "BAAI/bge-small-en"
+    └── Convert chunks to vector embeddings
+    └── Store embeddings with FAISS: index.faiss + index.pkl
+    └── Save metadata:
+         {
+            "file": "sample.pdf",
+            "chunks": 123,
+            "embedding_model": "all-MiniLM-L6-v2"
+         }
+
+[4] 🔍 VECTOR RETRIEVAL
+    └── On user query:
+        → Embed query using same embedding model
+        → Search top-k relevant chunks in FAISS
+
+[5] 🗣️ RUN LLM (MISTRAL 7B via OLLAMA)
+    └── Format prompt:
+        ---
+        CONTEXT:
+        {chunk1}
+        {chunk2}
+        {chunk3}
+
+        QUESTION: {user question}
+        ANSWER:
+        ---
+    └── Run with: `ollama run mistral`
+    └── Capture and display answer
+
+[6] 💾 SAVE & LOG (Optional)
+    └── Save Q&A to output/answers.txt
+    └── Optionally timestamp logs
+
+===============================================================
+🛠️ TOOLS & TECH
+===============================================================
+
+- PDF Reader: PyPDF2 / PyMuPDF
+- Chunker: langchain.text_splitter
+- Embedding: sentence-transformers (all-MiniLM-L6-v2)
+- Vector Store: FAISS (local)
+- LLM: Mistral 7B via Ollama (GPU-accelerated)
+- Interface: CLI or Streamlit (optional)
+
+===============================================================
+✅ FINAL NOTES
+===============================================================
+
+- Fully offline: no internet, no API keys
+- Fast inference with Mistral 7B (GPU)
+- Easy to extend: multi-PDF, long-form answers, etc.
+
+===============================================================
