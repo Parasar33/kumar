@@ -45,7 +45,7 @@ Born from the vision of creating a true AI co-pilot, Kumar blends the power of l
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/kumar.git
+git clone https://github.com/Parasar33/kumar.git
 cd kumar
 
 # (Optional) Create a virtual environment
